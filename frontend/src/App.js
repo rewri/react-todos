@@ -16,15 +16,27 @@ export default function App() {
     const [allTasks, setAllTasks] = useState([]);
     const [selectedYear, setSelectedYear] = useState(2019);
     const [selectedMonth, setSelectedMonth] = useState(1);
-    const [selectedTodos, setSelectedTodos] = useState([]);
 
     useEffect(() => {
+        
         const getTasks = async () => {
-            const tasks = await api.getAllTasks();
+            const tasks = await api.getAllTasks(selectedYear, selectedMonth);
             setAllTasks(tasks);
         }
         getTasks();
     }, []);
+    
+    const done = allTasks.filter((task) => {
+        return task.done === true;
+    });
+
+    const handleYearFilter = (value) => {
+        setSelectedYear(value);
+    }
+
+    const handleMonthFilter = (value) => {
+        setSelectedMonth(value);
+    }
 
     return <div className="container">
         <h1 className="center">React ToDos</h1>
@@ -35,20 +47,22 @@ export default function App() {
             <div> 
                 <ButtonContainer >          
                     {FILTER_YEARS.map((year, index) => {
-                        return (<Button key={index} label={year} value={year}></Button>);
+                        return (<Button key={index} label={year} value={year} selected={selectedYear} selectDate={handleYearFilter}></Button>);
                     })}
                 </ButtonContainer > 
                 <ButtonContainer >
                     {FILTER_MONTHS.map((month, index) => {
-                        return (<Button key={index} label={month} value={month + 1}></Button>);
+                        return (<Button key={index} label={month} value={index + 1} selected={selectedMonth} selectDate={handleMonthFilter}></Button>);
                     })}
                 </ButtonContainer > 
 
-                <Summary /> 
+                <Summary total={allTasks.length} done={done.length} /> 
 
                 <Todos> 
                     {allTasks.map(({ id, date, description, done }) => {
-                        return (<Todo key={id} date={date} description={description} status={done}></Todo>);
+                        return (
+                            <Todo key={id} date={date.split('-').reverse().join('/')} description={description} status={done}></Todo>
+                        );
                     })}
                 </Todos>
             </div> 

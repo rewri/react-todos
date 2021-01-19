@@ -2,20 +2,15 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3001/todos/';
 
-async function getAllTasks() {
-    const res = await axios.get(API_URL);
-    const tasks = res.data.map((task) => { return {...task} });
-    return tasks;
-}
-
-async function getTasksByDate() {
-
-    const year = 2020;
-    const month = 3;
-
-    const res = await axios.get(`${API_URL}?year=${year}&month=${month}`);
+async function getAllTasks(year, month) {
+    const selectedYear = year || 2020;
+    const selectedMonth = month || 3;
+    const res = await axios.get(`${API_URL}?year=${selectedYear}&month=${selectedMonth}`);
     const tasks = res.data.map((task) => { return { ...task } });
-    return tasks;
+    return tasks.sort(function (a, b) {
+        const dateA = new Date(a.date), dateB = new Date(b.date);
+        return dateA - dateB;
+    });
 }
 
-export { getAllTasks, getTasksByDate };
+export { getAllTasks };

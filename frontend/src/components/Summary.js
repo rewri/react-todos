@@ -1,11 +1,11 @@
 import React from 'react'
 
-export default function Summary() {
+export default function Summary({ total, done }) {
     return (
         <div style={styles.flexRow}>
-            <span style={styles.span}>Total de tarefas: 0</span>
-            <span style={styles.span}>Tarefas cumpridas: 0</span>
-            <span style={styles.span}>Tarefas não cumpridas: 0</span>
+            <span style={styles.span}>Total de tarefas: { total } </span>
+            <span style={styles.span}>Tarefas cumpridas: { done }</span>
+            <span style={styles.span}>Tarefas não cumpridas: { total - done }</span>
         </div>
     )
 }
