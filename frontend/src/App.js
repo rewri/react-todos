@@ -22,20 +22,20 @@ export default function App() {
         const getTasks = async () => {
             const tasks = await api.getAllTasks(selectedYear, selectedMonth);
             setAllTasks(tasks);
-        }
+            console.log(tasks);        }
         getTasks();
-    }, []);
+    }, [selectedYear, selectedMonth]);
     
     const done = allTasks.filter((task) => {
         return task.done === true;
     });
 
-    const handleYearFilter = (value) => {
-        setSelectedYear(value);
+    function handleYearFilter(newYear) {
+        setSelectedYear(newYear);
     }
 
-    const handleMonthFilter = (value) => {
-        setSelectedMonth(value);
+    function handleMonthFilter(newMonth) {
+        setSelectedMonth(newMonth);
     }
 
     return <div className="container">
@@ -47,12 +47,12 @@ export default function App() {
             <div> 
                 <ButtonContainer >          
                     {FILTER_YEARS.map((year, index) => {
-                        return (<Button key={index} label={year} value={year} selected={selectedYear} selectDate={handleYearFilter}></Button>);
+                        return (<Button key={index} label={year} value={year} selected={selectedYear} onChange={handleYearFilter}></Button>);
                     })}
                 </ButtonContainer > 
                 <ButtonContainer >
                     {FILTER_MONTHS.map((month, index) => {
-                        return (<Button key={index} label={month} value={index + 1} selected={selectedMonth} selectDate={handleMonthFilter}></Button>);
+                        return (<Button key={index} label={month} value={index + 1} selected={selectedMonth} onChange={handleMonthFilter}></Button>);
                     })}
                 </ButtonContainer > 
 
